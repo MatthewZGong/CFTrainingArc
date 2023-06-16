@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 // g++-12 -o main [file].cpp;
+//./main < input.txt > output.txt
 using namespace std;
 
 int solve(){
