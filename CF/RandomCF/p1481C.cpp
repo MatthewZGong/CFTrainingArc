@@ -1,12 +1,15 @@
 #include<bits/stdc++.h>
 
 using namespace std;
+#pragma region
 void print(int v[], int n){
     for(int i =0 ; i < n; ++i){ 
         cout << v[i] << " ";
     }
     cout << endl;
 }
+#pragma endregion
+
 int a[100000+10];
 int b[100000+10];
 int c[100000+10];
