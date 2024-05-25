@@ -47,77 +47,40 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-int n, x;
-int a[100'000];
-
-int works(int bound, int mask){ 
-    int k = 0; 
-    int current = 0;
-    for(int i =0; i < n; i++){ 
-        current ^= a[i]; 
-        if( (current & (~mask) ) <=  bound){
-            // cout << current << " " << i << endl;
-            k++; 
-            current = 0;
-        }
-    }
-    if(current  != 0){ 
-        return -1;
-    }
-    return k;
-}
-
-
+int a[200'001];
 
 void solve(){
-    cin >> n >> x;
-    for(int i =0; i < n; i++){ 
+    int n; 
+    int k;
+    cin >> n >> k;
+    for(int i = 1; i <= n; i++){
         cin >> a[i];
     }
-    // cout << "start " << n << " " << x << endl;
-    int res = -1;
-    int anti_mask = ~x; 
-    int k = 0; 
-    int current_mask = 0;
-    for(int i =0; i < n; i++){ 
-        current_mask ^= a[i];
-        if((current_mask & anti_mask) == 0){
-            k++;
-            current_mask = 0;
+    a[0] = INT_MAX;
+    int swap_pos = 1;
+    for(int i =1; i < k; i++){ 
+        if(a[i] > a[k]){ 
+            swap_pos = i;
+            break;
         }
     }
-    if(current_mask & anti_mask){
-        k = -1;
-    }
-    res = max(k, res);
-
-    int bound = 1 << 30;
-    int cover = ~0;
-    
-    
-    for(int i = 0; i <= 30; i++){ 
-        int current_ind = (1 << i);
-        int anti_mask = ((~x) & cover) | current_ind;
-        if( (current_ind & x)){
-            int k = 0;
-            int current_mask = 0;
-            for(int i =0; i < n; i++){ 
-                current_mask ^= a[i]; 
-                if( (current_mask & anti_mask) == 0){ 
-                    current_mask = 0;
-                    k++;
-                }
-            }
-            if(current_mask & anti_mask){
-                k = -1;
-            }
-            res = max(k, res);
+    int res = swap_pos-2;
+    // cout << swap_pos << endl;
+    swap(a[k], a[swap_pos]);
+    // print(a, n+1,1);
+    k = swap_pos;
+    int wins = a[k] > a[k-1] ? 1 : 0;
+    for(int i = k+1; i <= n; i++){
+        if(a[k] > a[i]){
+            wins ++;
+        }else{ 
+            break;
         }
-        cover = cover ^ current_ind;
 
     }
-    cout << res << endl;
-    
+    cout << max(res, wins) << endl;
+    return; 
+
 
 
 

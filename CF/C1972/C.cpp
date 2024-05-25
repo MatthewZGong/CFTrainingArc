@@ -47,77 +47,60 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-int n, x;
-int a[100'000];
+ll a[2'00'000];
 
-int works(int bound, int mask){ 
-    int k = 0; 
-    int current = 0;
-    for(int i =0; i < n; i++){ 
-        current ^= a[i]; 
-        if( (current & (~mask) ) <=  bound){
-            // cout << current << " " << i << endl;
-            k++; 
-            current = 0;
+bool works(ll target, ll n,  ll k){ 
+    // cout << "target: " << target << endl;
+    for(int i = 0; i < n; i++){ 
+        ll diff = max(target-a[i], 0ll); 
+        k -= diff; 
+        // cout << diff << endl;
+    }
+    // cout << "k: " << k << endl;
+    if(k < 0){ 
+        return false;
+    }
+    return true; 
+} 
+
+ll find_target(ll n, ll k){ 
+    ll end = *max_element(a, a+n)+k;
+    ll start = *min_element(a, a+n);
+    while(start < end){ 
+        ll mid = (start+end+1)/2; 
+        // cout << mid << endl;
+        if(works(mid, n, k)){ 
+            start = mid;
+        }else{ 
+            end = mid-1;
         }
     }
-    if(current  != 0){ 
-        return -1;
-    }
-    return k;
+    return start; 
 }
 
 
-
 void solve(){
-    cin >> n >> x;
-    for(int i =0; i < n; i++){ 
+    ll n, k; 
+    cin >> n >> k;
+    for(int i = 0; i < n; i++){ 
         cin >> a[i];
     }
-    // cout << "start " << n << " " << x << endl;
-    int res = -1;
-    int anti_mask = ~x; 
-    int k = 0; 
-    int current_mask = 0;
-    for(int i =0; i < n; i++){ 
-        current_mask ^= a[i];
-        if((current_mask & anti_mask) == 0){
-            k++;
-            current_mask = 0;
+    ll target = find_target(n, k);
+    // cout << "target: " << target << endl;
+    ll res = target*n-(n-1);
+    ll leftover = k;
+    for(int i = 0; i < n; i++){ 
+        ll diff = max(target-a[i], 0ll);
+        leftover -= diff;
+    }
+    // cout << "leftover: " << leftover << endl;
+    for(int i = 0; i < n ; i++){ 
+        if(a[i] > target){
+            res += 1; 
         }
     }
-    if(current_mask & anti_mask){
-        k = -1;
-    }
-    res = max(k, res);
-
-    int bound = 1 << 30;
-    int cover = ~0;
-    
-    
-    for(int i = 0; i <= 30; i++){ 
-        int current_ind = (1 << i);
-        int anti_mask = ((~x) & cover) | current_ind;
-        if( (current_ind & x)){
-            int k = 0;
-            int current_mask = 0;
-            for(int i =0; i < n; i++){ 
-                current_mask ^= a[i]; 
-                if( (current_mask & anti_mask) == 0){ 
-                    current_mask = 0;
-                    k++;
-                }
-            }
-            if(current_mask & anti_mask){
-                k = -1;
-            }
-            res = max(k, res);
-        }
-        cover = cover ^ current_ind;
-
-    }
+    res += leftover;
     cout << res << endl;
-    
 
 
 

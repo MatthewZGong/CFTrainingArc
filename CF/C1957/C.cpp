@@ -47,76 +47,44 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-int n, x;
-int a[100'000];
+ll MOD = 1e9+7;
 
-int works(int bound, int mask){ 
-    int k = 0; 
-    int current = 0;
-    for(int i =0; i < n; i++){ 
-        current ^= a[i]; 
-        if( (current & (~mask) ) <=  bound){
-            // cout << current << " " << i << endl;
-            k++; 
-            current = 0;
-        }
+ll dp[3'00'001];
+
+
+
+ll get_count(ll n){ 
+    if(n == 0){ 
+        return 1;
+    }if(dp[n] > 0){
+        return dp[n];
     }
-    if(current  != 0){ 
-        return -1;
+    ll res = get_count(n-1) % MOD;
+    if(n > 1){ 
+        ll a = ((n-1)*get_count(n-2)) % MOD;
+        a = (a*2) % MOD;
+        res += a;
+        res %= MOD;
     }
-    return k;
+    return dp[n] = res % MOD;
+//    9 485 630 585
 }
 
-
-
 void solve(){
-    cin >> n >> x;
-    for(int i =0; i < n; i++){ 
-        cin >> a[i];
+    int n, k; 
+    cin >> n >> k;
+    int leftover = n;
+    for(int i = 0; i < k; i++){ 
+        int a,b; 
+        cin >> a >> b;
+        leftover -= (a== b) ? 1: 2; 
     }
-    // cout << "start " << n << " " << x << endl;
-    int res = -1;
-    int anti_mask = ~x; 
-    int k = 0; 
-    int current_mask = 0;
-    for(int i =0; i < n; i++){ 
-        current_mask ^= a[i];
-        if((current_mask & anti_mask) == 0){
-            k++;
-            current_mask = 0;
-        }
+    if(leftover == 0){
+        cout << 1 << endl;
+        return;
     }
-    if(current_mask & anti_mask){
-        k = -1;
-    }
-    res = max(k, res);
+    cout << get_count(leftover) % MOD << endl;
 
-    int bound = 1 << 30;
-    int cover = ~0;
-    
-    
-    for(int i = 0; i <= 30; i++){ 
-        int current_ind = (1 << i);
-        int anti_mask = ((~x) & cover) | current_ind;
-        if( (current_ind & x)){
-            int k = 0;
-            int current_mask = 0;
-            for(int i =0; i < n; i++){ 
-                current_mask ^= a[i]; 
-                if( (current_mask & anti_mask) == 0){ 
-                    current_mask = 0;
-                    k++;
-                }
-            }
-            if(current_mask & anti_mask){
-                k = -1;
-            }
-            res = max(k, res);
-        }
-        cover = cover ^ current_ind;
-
-    }
-    cout << res << endl;
     
 
 
@@ -128,6 +96,7 @@ int main(){
     cin.tie(nullptr);
     int t; 
     cin >> t; 
+    memset(dp, -1, sizeof(dp));
     while(t--){
         
         solve();

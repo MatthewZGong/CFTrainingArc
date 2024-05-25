@@ -47,78 +47,62 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-int n, x;
-int a[100'000];
 
-int works(int bound, int mask){ 
-    int k = 0; 
-    int current = 0;
-    for(int i =0; i < n; i++){ 
-        current ^= a[i]; 
-        if( (current & (~mask) ) <=  bound){
-            // cout << current << " " << i << endl;
-            k++; 
-            current = 0;
-        }
-    }
-    if(current  != 0){ 
-        return -1;
-    }
-    return k;
-}
-
-
-
+int p[100'000];
+int q[100'000];
 void solve(){
-    cin >> n >> x;
-    for(int i =0; i < n; i++){ 
-        cin >> a[i];
-    }
-    // cout << "start " << n << " " << x << endl;
-    int res = -1;
-    int anti_mask = ~x; 
-    int k = 0; 
-    int current_mask = 0;
-    for(int i =0; i < n; i++){ 
-        current_mask ^= a[i];
-        if((current_mask & anti_mask) == 0){
-            k++;
-            current_mask = 0;
+    int n; 
+    cin >> n; 
+    vector<pair<int,int>> evens; 
+    vector<pair<int,int>> odds;
+    int loc = 0;
+    for(int i =0 ; i < n; ++i){ 
+        cin >> p[i];
+        if(p[i] == 1){ 
+            loc = i;
+        }
+    } 
+
+    if(loc%2 == 0){ 
+        for(int i = 0; i < n-1  ; ++i){ 
+            if(i%2 == 0){
+                evens.push_back({p[i],i});
+            }else{
+                odds.push_back({p[i],i});
+            }
+        }
+        odds.push_back({n+1,n-1});
+        sort(evens.begin(), evens.end());
+        sort(odds.begin(), odds.end());
+        for(int i = 0; i < evens.size(); ++i){ 
+            auto [num,  ind] = evens[i];
+            q[ind] = n/2-i;
+            auto [num2, ind2] = odds[i];
+            q[ind2] = n-i;
+        }
+
+    }else{ 
+        for(int i = 1; i < n; ++i){
+            if(i%2 == 0){
+                evens.push_back({p[i],i});
+            }else{
+                odds.push_back({p[i],i});
+            }
+        }
+        evens.push_back({n+1,0});
+        sort(evens.begin(), evens.end());
+        sort(odds.begin(), odds.end());
+        for(int i = 0; i < odds.size(); ++i){ 
+            auto [num,  ind] = evens[i];
+            q[ind] = n-i;
+            auto [num2, ind2] = odds[i];
+            q[ind2] = n/2-i;
         }
     }
-    if(current_mask & anti_mask){
-        k = -1;
+    for(int i = 0; i < n; ++i){ 
+        cout << q[i] << " ";
     }
-    res = max(k, res);
-
-    int bound = 1 << 30;
-    int cover = ~0;
-    
-    
-    for(int i = 0; i <= 30; i++){ 
-        int current_ind = (1 << i);
-        int anti_mask = ((~x) & cover) | current_ind;
-        if( (current_ind & x)){
-            int k = 0;
-            int current_mask = 0;
-            for(int i =0; i < n; i++){ 
-                current_mask ^= a[i]; 
-                if( (current_mask & anti_mask) == 0){ 
-                    current_mask = 0;
-                    k++;
-                }
-            }
-            if(current_mask & anti_mask){
-                k = -1;
-            }
-            res = max(k, res);
-        }
-        cover = cover ^ current_ind;
-
-    }
-    cout << res << endl;
-    
-
+    cout << endl;
 
 
 }

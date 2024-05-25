@@ -47,90 +47,68 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-int n, x;
-int a[100'000];
+double dp[1001][1001][2]; 
+double p[1001];
 
-int works(int bound, int mask){ 
-    int k = 0; 
-    int current = 0;
-    for(int i =0; i < n; i++){ 
-        current ^= a[i]; 
-        if( (current & (~mask) ) <=  bound){
-            // cout << current << " " << i << endl;
-            k++; 
-            current = 0;
+
+double expected(int i, int j, int open){ 
+    if(i == -1 && j == 0){ 
+        return 1;
+    }
+    if(i == -1 && j != 0){ 
+        return 0;
+    }
+    if(dp[i][j][open] != -1){ 
+        return dp[i][j][open];
+    }   
+    if(open){
+        double res =  p[i-1]*(expected(i-1,j-1,1)) +(1-p[i-1]) *expected(i-1, j+1, 0) + 1; 
+        res *= p[i]; 
+        return dp[i][j][open] = res;
+    }else{ 
+        if(j == 0){ 
+            double res  =  (1-p[i-1])* ( expected(i-1,0,0) ) + (1-p[i-1]) * expected(i-1,j+1, 0) 
+        }else{ 
+            return dp[i][j][open] = p[i-1]*expected(i-1,j-1, 1) + (1-p[i-1])*(expected(i-1,j+1,0)-1) -1;
         }
     }
-    if(current  != 0){ 
-        return -1;
-    }
-    return k;
+
+    
 }
 
-
-
 void solve(){
-    cin >> n >> x;
+    int n; 
+    cin >> n; 
     for(int i =0; i < n; i++){ 
-        cin >> a[i];
+        cin >> p[i];
     }
-    // cout << "start " << n << " " << x << endl;
-    int res = -1;
-    int anti_mask = ~x; 
-    int k = 0; 
-    int current_mask = 0;
-    for(int i =0; i < n; i++){ 
-        current_mask ^= a[i];
-        if((current_mask & anti_mask) == 0){
-            k++;
-            current_mask = 0;
+    dp[0][1] = p[0];
+    dp[0][0] = 1-p[0];
+
+    for(int i = 1; i < n; i++){ 
+        for(int j = 0; j <= n; j++){ 
+            dp[i][j] = -1; 
         }
     }
-    if(current_mask & anti_mask){
-        k = -1;
+    double res = 0; 
+    for(int i = 0; i <= n; i++){ 
+        res += expected(n-1,i);
     }
-    res = max(k, res);
-
-    int bound = 1 << 30;
-    int cover = ~0;
-    
-    
-    for(int i = 0; i <= 30; i++){ 
-        int current_ind = (1 << i);
-        int anti_mask = ((~x) & cover) | current_ind;
-        if( (current_ind & x)){
-            int k = 0;
-            int current_mask = 0;
-            for(int i =0; i < n; i++){ 
-                current_mask ^= a[i]; 
-                if( (current_mask & anti_mask) == 0){ 
-                    current_mask = 0;
-                    k++;
-                }
-            }
-            if(current_mask & anti_mask){
-                k = -1;
-            }
-            res = max(k, res);
+    cout << double(n)-res << endl;
+    for(int i = 1; i < n; i++){ 
+        for(int j = 0; j <= n; j++){ 
+            cout << dp[i][j] << " ";
         }
-        cover = cover ^ current_ind;
-
+        cout << endl;
     }
-    cout << res << endl;
     
-
-
 
 }
 
 int main(){
     ios::sync_with_stdio(false); 
     cin.tie(nullptr);
-    int t; 
-    cin >> t; 
-    while(t--){
         
         solve();
-    }
     return 0;
 }

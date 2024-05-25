@@ -47,77 +47,33 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-int n, x;
-int a[100'000];
-
-int works(int bound, int mask){ 
-    int k = 0; 
-    int current = 0;
-    for(int i =0; i < n; i++){ 
-        current ^= a[i]; 
-        if( (current & (~mask) ) <=  bound){
-            // cout << current << " " << i << endl;
-            k++; 
-            current = 0;
-        }
-    }
-    if(current  != 0){ 
-        return -1;
-    }
-    return k;
-}
-
 
 
 void solve(){
-    cin >> n >> x;
-    for(int i =0; i < n; i++){ 
-        cin >> a[i];
+    set<int> numbers;
+    int n; 
+    cin >> n; 
+    for(int i = 0; i < n; i++){ 
+        int val; 
+        cin >> val;
+        numbers.insert(val);
     }
-    // cout << "start " << n << " " << x << endl;
-    int res = -1;
-    int anti_mask = ~x; 
-    int k = 0; 
-    int current_mask = 0;
-    for(int i =0; i < n; i++){ 
-        current_mask ^= a[i];
-        if((current_mask & anti_mask) == 0){
-            k++;
-            current_mask = 0;
+    bool alice = false; 
+    int threshold = 1;
+    for(auto itr = numbers.begin(); itr != numbers.end(); itr++){ 
+        int current = *itr; 
+        alice = !alice;
+        if(current == threshold){
+            threshold++;
+        }else{
+            break;
         }
     }
-    if(current_mask & anti_mask){
-        k = -1;
+    if(alice == true){
+        cout << "Alice" << endl;
+    }else{ 
+        cout << "Bob" << endl;
     }
-    res = max(k, res);
-
-    int bound = 1 << 30;
-    int cover = ~0;
-    
-    
-    for(int i = 0; i <= 30; i++){ 
-        int current_ind = (1 << i);
-        int anti_mask = ((~x) & cover) | current_ind;
-        if( (current_ind & x)){
-            int k = 0;
-            int current_mask = 0;
-            for(int i =0; i < n; i++){ 
-                current_mask ^= a[i]; 
-                if( (current_mask & anti_mask) == 0){ 
-                    current_mask = 0;
-                    k++;
-                }
-            }
-            if(current_mask & anti_mask){
-                k = -1;
-            }
-            res = max(k, res);
-        }
-        cover = cover ^ current_ind;
-
-    }
-    cout << res << endl;
-    
 
 
 

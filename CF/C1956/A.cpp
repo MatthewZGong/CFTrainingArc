@@ -47,79 +47,22 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-int n, x;
-int a[100'000];
 
-int works(int bound, int mask){ 
-    int k = 0; 
-    int current = 0;
-    for(int i =0; i < n; i++){ 
-        current ^= a[i]; 
-        if( (current & (~mask) ) <=  bound){
-            // cout << current << " " << i << endl;
-            k++; 
-            current = 0;
-        }
-    }
-    if(current  != 0){ 
-        return -1;
-    }
-    return k;
-}
-
-
-
+int a[100];
 void solve(){
-    cin >> n >> x;
-    for(int i =0; i < n; i++){ 
+    int k, q; 
+    cin >> k >> q;
+    for(int i = 0; i < k; i++){ 
         cin >> a[i];
     }
-    // cout << "start " << n << " " << x << endl;
-    int res = -1;
-    int anti_mask = ~x; 
-    int k = 0; 
-    int current_mask = 0;
-    for(int i =0; i < n; i++){ 
-        current_mask ^= a[i];
-        if((current_mask & anti_mask) == 0){
-            k++;
-            current_mask = 0;
-        }
-    }
-    if(current_mask & anti_mask){
-        k = -1;
-    }
-    res = max(k, res);
+    for(int i = 0; i < q; i++){ 
+        int n; 
+        cin >> n;
+        cout <<min(a[0]-1, n) << " ";
+    } 
+    cout << endl;
 
-    int bound = 1 << 30;
-    int cover = ~0;
     
-    
-    for(int i = 0; i <= 30; i++){ 
-        int current_ind = (1 << i);
-        int anti_mask = ((~x) & cover) | current_ind;
-        if( (current_ind & x)){
-            int k = 0;
-            int current_mask = 0;
-            for(int i =0; i < n; i++){ 
-                current_mask ^= a[i]; 
-                if( (current_mask & anti_mask) == 0){ 
-                    current_mask = 0;
-                    k++;
-                }
-            }
-            if(current_mask & anti_mask){
-                k = -1;
-            }
-            res = max(k, res);
-        }
-        cover = cover ^ current_ind;
-
-    }
-    cout << res << endl;
-    
-
-
 
 }
 
