@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-// g++-14 -o main [file].cpp;
+// g++-12 -o main [file].cpp;
 //./main < input.txt > output.txt
 using namespace std;
 
@@ -22,10 +22,6 @@ void print(vector<T> v){
 ll inv_mod_prime(ll a, ll MOD) {
   return a <= 1 ? a : MOD - (MOD/a) * inv_mod_prime(MOD % a, MOD) % MOD;
 }
-// count number of bits 
-// only for int64 and int32
-//__builtin_popcount 
-
 // void sieve(int n){ 
 //     // cout << "sieved" << endl;
 //     memset(lowest_divisors, 63, sizeof(lowest_divisors));
@@ -51,12 +47,46 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-
-
+vector<pair<int,int>> values;
+int dp[5000][5000];
+int counter[5001];
+int n;
+int solve(int i, int j){ 
+    if(j >= values.size()){
+        return 0;
+    }
+    if(dp[i][j] != -1){ 
+        return dp[i][j];
+    }
+    int count = values[j].second;
+    int diff = j-i; 
+    if(diff < count){ 
+        return solve(i,j+1);
+    }
+    int res = 1+solve(i+count+1, j+1); 
+    res = max(res, solve(i, j+1)); 
+    return dp[i][j] = res;
+}
 void solve(){
-    
-
-
+    cin >> n; 
+    memset(counter, 0, 4*(n+1));
+    values.clear();
+    for(int i =0; i < n; i++){  
+        for(int j =0; j < n; j++){ 
+            dp[i][j] = -1;
+        }
+    }
+    for(int i =0; i < n; i++){ 
+        int val; 
+        cin >> val;
+        counter[val]++;
+    }
+    for(int i =1; i <= n; i++){ 
+        if(counter[i] != 0){
+            values.push_back({i, counter[i]});
+        }
+    }
+    cout << values.size()-solve(0,0) << endl;
 
 }
 

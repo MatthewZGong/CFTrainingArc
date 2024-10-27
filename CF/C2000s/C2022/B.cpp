@@ -1,3 +1,4 @@
+#include <algorithm>
 #include<bits/stdc++.h>
 // g++-14 -o main [file].cpp;
 //./main < input.txt > output.txt
@@ -52,10 +53,20 @@ ll inv_mod_prime(ll a, ll MOD) {
 #pragma endregion
 
 
-
+ll a[5'00'000];
+ll cars[10];
 void solve(){
-    
-
+    int n; 
+    int x; 
+    cin >> n >> x; 
+    ll total = 0;
+    for(int i =0; i < n; i++){ 
+        cin >> a[i]; 
+        total += a[i];
+    }
+    ll max_car = *max_element(a, a+n);
+    ll min_moves = total/x + ( (total%x) > 0);
+    cout << max(max_car, min_moves) << endl;
 
 
 }

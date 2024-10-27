@@ -51,10 +51,44 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
+bool check_same(int a, int b){ 
+    cout << "? " << a << " " << b << endl;
+    int ans1; 
+    cin >> ans1; 
+    cout << "? " << b << " " <<  a<< endl;
+    int ans2; 
+    cin >> ans2;
+    return ans1 == ans2;
+}
 
 
 void solve(){
-    
+    int n; 
+    cin >> n;
+    int imposter_area = -1;
+    for(int i = 1; i <= n - (n%2); i+= 2){ 
+        if(!check_same(i, i+1)){
+            imposter_area = i;
+            break;
+        }
+    }
+    if(imposter_area == -1){ 
+        cout << "! " << n << endl;
+    }else{ 
+        if(imposter_area == 1){ 
+            if (!check_same(n, imposter_area)){ 
+                cout << "! " << imposter_area << endl;
+            }else{ 
+                cout << "! " << imposter_area+1 << endl;
+            }
+        }else{ 
+            if (!check_same(1, imposter_area)){ 
+                cout << "! " << imposter_area << endl;
+            }else{ 
+                cout << "! " << imposter_area+1 << endl;
+            }
+        }
+    }
 
 
 

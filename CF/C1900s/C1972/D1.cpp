@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-// g++-14 -o main [file].cpp;
+// g++-12 -o main [file].cpp;
 //./main < input.txt > output.txt
 using namespace std;
 
@@ -22,10 +22,6 @@ void print(vector<T> v){
 ll inv_mod_prime(ll a, ll MOD) {
   return a <= 1 ? a : MOD - (MOD/a) * inv_mod_prime(MOD % a, MOD) % MOD;
 }
-// count number of bits 
-// only for int64 and int32
-//__builtin_popcount 
-
 // void sieve(int n){ 
 //     // cout << "sieved" << endl;
 //     memset(lowest_divisors, 63, sizeof(lowest_divisors));
@@ -54,9 +50,14 @@ ll inv_mod_prime(ll a, ll MOD) {
 
 
 void solve(){
-    
-
-
+    ll n, m; 
+    cin >> n >> m;
+    ll res = n;
+    for(ll b = 2; b <= m; b++){ 
+        ll square = b*b; 
+        res += (n+b)/square;
+    }
+    cout << res << endl;
 
 }
 

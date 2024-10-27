@@ -1,5 +1,6 @@
+
 #include<bits/stdc++.h>
-// g++-14 -o main [file].cpp;
+// g++-12 -o main [file].cpp;
 //./main < input.txt > output.txt
 using namespace std;
 
@@ -22,10 +23,6 @@ void print(vector<T> v){
 ll inv_mod_prime(ll a, ll MOD) {
   return a <= 1 ? a : MOD - (MOD/a) * inv_mod_prime(MOD % a, MOD) % MOD;
 }
-// count number of bits 
-// only for int64 and int32
-//__builtin_popcount 
-
 // void sieve(int n){ 
 //     // cout << "sieved" << endl;
 //     memset(lowest_divisors, 63, sizeof(lowest_divisors));
@@ -52,9 +49,36 @@ ll inv_mod_prime(ll a, ll MOD) {
 #pragma endregion
 
 
-
+ll a[2'00'000];
 void solve(){
-    
+    ll n; 
+    cin >> n; 
+    ll odd = 0; 
+    ll largest = 0;
+    ll largest_odd = 0;
+    for(int i =0; i < n; i++){
+        cin >> a[i];
+        odd += a[i]%2;
+        largest = max(largest, a[i]);
+        if(a[i]%2) largest_odd = max(largest_odd, a[i]);
+    }
+    if(odd == 0 || odd == n){ 
+        cout << 0 << endl;
+        return;
+    }
+    sort(a, a+n);
+    // cout << largest << " " << odd << endl;
+    for(int i = 0; i < n; i++){ 
+        if(a[i] % 2 == 0){ 
+            if(a[i] > largest_odd){ 
+                cout << n-odd+1 << endl;
+                return;
+            }
+            largest_odd += a[i];
+        }
+    }
+    cout << n-odd  << endl;
+    return;
 
 
 

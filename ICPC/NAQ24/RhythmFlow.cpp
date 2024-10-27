@@ -51,10 +51,42 @@ ll inv_mod_prime(ll a, ll MOD) {
 // }
 #pragma endregion
 
-
+ll expected_hits[2001]; 
+ll registered_hits[2001];
+ll dp[2001][2001];
+ll match(int e, int a){ 
+    int diff = abs(e-a);
+    if(diff <= 15){ 
+        return 7;
+    }else if(diff <= 23){
+        return 6;
+    }else if(diff <= 43){
+        return 4;
+    }else if(diff <= 102){ 
+        return 2;
+    }
+    return 0;
+}
 
 void solve(){
-    
+    int n, m; 
+    cin >> n >> m;
+    for(int i =0; i < n; i++){ 
+        cin >> expected_hits[i];
+    }
+    for(int i =0 ; i < m; i++){
+        cin >> registered_hits[i];
+    }
+    for(int i = n-1; i >= 0; i--){ 
+        for(int j = m-1; j >= 0; j-- ){
+            ll score = match(expected_hits[i], registered_hits[j]);
+            ll res = max(score+dp[i+1][j+1], dp[i][j+1]);
+            res = max(res, dp[i+1][j]);
+            dp[i][j] = res;
+        }
+    }
+    cout << dp[0][0] << endl;
+
 
 
 
@@ -63,11 +95,6 @@ void solve(){
 int main(){
     ios::sync_with_stdio(false); 
     cin.tie(nullptr);
-    int t; 
-    cin >> t; 
-    while(t--){
-        
         solve();
-    }
     return 0;
 }

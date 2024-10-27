@@ -1,3 +1,4 @@
+
 #include<bits/stdc++.h>
 // g++-14 -o main [file].cpp;
 //./main < input.txt > output.txt
@@ -22,10 +23,6 @@ void print(vector<T> v){
 ll inv_mod_prime(ll a, ll MOD) {
   return a <= 1 ? a : MOD - (MOD/a) * inv_mod_prime(MOD % a, MOD) % MOD;
 }
-// count number of bits 
-// only for int64 and int32
-//__builtin_popcount 
-
 // void sieve(int n){ 
 //     // cout << "sieved" << endl;
 //     memset(lowest_divisors, 63, sizeof(lowest_divisors));
@@ -52,9 +49,41 @@ ll inv_mod_prime(ll a, ll MOD) {
 #pragma endregion
 
 
-
+int time_line[400'000];
+int a[200'000];
+void set_timeline(int time, int length, int k){
+    int point = time%length; 
+    time_line[point] += 1; 
+    if((point+k)%length < point){ 
+        time_line[0] += 1;
+    }
+    time_line[(point+k)%length] -= 1; 
+}
 void solve(){
-    
+    int n, k; 
+    cin >> n >> k;
+    int length = 2*k;
+    memset(time_line, 0, sizeof(time_line));
+    int last = 0;
+    for(int i =0; i < n; i++){ 
+        cin >> a[i]; 
+        set_timeline(a[i], length, k);
+        last = max(a[i], last);
+    }
+    int current = 0;
+    for(int i = 0; i < length; i++){ 
+        current += time_line[i]; 
+        time_line[i] = current;
+    }
+    int start = last%length;
+    for(int i = 0; i < length; i++){ 
+        int current = (start+i)%length;
+        if(time_line[current] == n){ 
+            cout << last+i << endl;
+            return;
+        }
+    }
+    cout << -1 << endl;
 
 
 

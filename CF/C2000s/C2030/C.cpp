@@ -54,7 +54,29 @@ ll inv_mod_prime(ll a, ll MOD) {
 
 
 void solve(){
-    
+    int n; 
+    cin >> n; 
+    string s; 
+    cin >> s; 
+    if(s[0] == '1' || s[n-1] == '1'){ 
+        cout << "YES" << endl;
+        return;
+    }
+    int count = 0;
+    int max_count = 0;
+    for(int i =0; i < n; i++){ 
+        if(s[i] == '1'){ 
+            count++; 
+        }else{
+            count = 0;
+        }
+        max_count = max(count, max_count);
+    }
+    if (max_count > 1){ 
+        cout << "YES" << endl;
+    }else{ 
+        cout << "NO" << endl;
+    }
 
 
 

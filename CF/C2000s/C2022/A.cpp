@@ -54,7 +54,31 @@ ll inv_mod_prime(ll a, ll MOD) {
 
 
 void solve(){
-    
+    int n, r; 
+    cin >> n >> r; 
+    int odds = 0;
+    int total = 2*r;
+    int happy = 0;
+    for(int i =0; i < n; i++){ 
+        int a; 
+        cin >> a; 
+        if(a%2 == 1){ 
+            happy += a-1; 
+            odds += 1; 
+        }else{ 
+            happy += a; 
+        }
+    }
+    // cout << total << endl;
+    int left = total-happy; 
+    int seats_left = left/2; 
+    int singles = min(odds, seats_left); 
+
+    int people = odds-singles;
+    happy += singles-people;
+
+    cout << happy << endl;
+
 
 
 

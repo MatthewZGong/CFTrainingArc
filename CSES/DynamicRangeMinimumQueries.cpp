@@ -54,8 +54,6 @@ struct Segment{
     Segment(int s, int e, ll v): start(s), end(e), min(v){ 
         
     }
-
-
 };
 
 
@@ -103,7 +101,6 @@ int query_sum(int root, int start, int end){
         return seg.min; 
     }
     int mid = (seg.start+seg.end)/2;
-    // cout << mid << " " << start << " " << end << endl;
     if(end <= mid){ 
         return query_sum(seg.left, start, end);
     }else if(start > mid){ 

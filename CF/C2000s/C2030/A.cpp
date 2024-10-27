@@ -54,6 +54,18 @@ ll inv_mod_prime(ll a, ll MOD) {
 
 
 void solve(){
+    int max_ele = 0; 
+    int min_ele = 1001; 
+    int n; 
+    cin >> n;
+    for (int i =0; i < n; i++){
+        int a; 
+        cin >> a; 
+        max_ele = max(max_ele, a);
+        min_ele = min(min_ele, a);
+    }
+    cout << (max_ele-min_ele)*(n-1) << endl;
+
     
 
 

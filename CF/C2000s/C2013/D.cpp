@@ -22,10 +22,6 @@ void print(vector<T> v){
 ll inv_mod_prime(ll a, ll MOD) {
   return a <= 1 ? a : MOD - (MOD/a) * inv_mod_prime(MOD % a, MOD) % MOD;
 }
-// count number of bits 
-// only for int64 and int32
-//__builtin_popcount 
-
 // void sieve(int n){ 
 //     // cout << "sieved" << endl;
 //     memset(lowest_divisors, 63, sizeof(lowest_divisors));
@@ -52,11 +48,50 @@ ll inv_mod_prime(ll a, ll MOD) {
 #pragma endregion
 
 
+ll a[2'00'000];
+
+bool canMerge(ll total, int count, pair<ll,int> group){
+    auto [num, ammount] = group; 
+    return total/count < num;
+}
 
 void solve(){
+    int n; 
+    cin >> n; 
+    // cout << "--------------------" << endl;
+    for(int i = 0; i < n; i++){ 
+        cin >> a[i];
+    }
+    vector<pair<ll, int>> groups; 
+    for(int i = 0; i < n; i++){   
+        ll total = a[i]; 
+        int count = 1;
+        while(groups.size() && canMerge(total, count, groups.back())){ 
+            total += groups.back().first*groups.back().second;
+            count += groups.back().second;
+            groups.pop_back();
+        }
+        if(total%count == 0){ 
+            groups.emplace_back(total/count, count);
+        }else{ 
+
+            groups.emplace_back(total/count, count-(total%count));
+            groups.emplace_back(total/count+1, total%count);
+        }
+
+        // for(int i =0 ; i < groups.size(); i++){ 
+        //     cout << groups[i].first  << " " << groups[i].second << endl;
+        // }
+        // cout << endl;
+
+    }
+    // cout << groups.size() << endl;
+    // for(int i =0 ; i < groups.size(); i++){ 
+    //     cout << groups[i].first  << " " << groups[i].second << endl;
+    // }
+    // cout << endl;
+    cout << groups.back().first-groups.front().first << endl;
     
-
-
 
 }
 
